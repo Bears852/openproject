@@ -164,29 +164,38 @@ namespace :parallel do
     ParallelParser.with_args(ARGV) do |options|
       ARGV.each { |a| task(a.to_sym) {} }
 
-      run_specs options, 'spec'
+      # Run both core and all plugins
+      spec_folders = ['spec' + Plugins::LoadPathHelper.spec_load_paths].join(' ')
+
+      run_specs options, spec_folders
     end
   end
 
   desc 'Run feature specs in parallel'
   task features: [:environment] do
-    pattern = "--pattern '^spec\/features\/'"
+    pattern = "--pattern 'spec\/features\/'"
 
     ParallelParser.with_args(ARGV) do |options|
       ARGV.each { |a| task(a.to_sym) {} }
 
-      run_specs options, 'spec', pattern
+      # Run both core and all plugins
+      spec_folders = ['spec' + Plugins::LoadPathHelper.spec_load_paths].join(' ')
+
+      run_specs options, spec_folders, pattern
     end
   end
 
   desc 'Run unit specs in parallel'
   task units: [:environment] do
-    pattern = "--pattern '^spec/(?!features\/)'"
+    pattern = "--pattern 'spec/(?!features\/)'"
 
     ParallelParser.with_args(ARGV) do |options|
       ARGV.each { |a| task(a.to_sym) {} }
 
-      run_specs options, 'spec', pattern
+      # Run both core and all plugins
+      spec_folders = ['spec' + Plugins::LoadPathHelper.spec_load_paths].join(' ')
+
+      run_specs options, spec_folders, pattern
     end
   end
 end
